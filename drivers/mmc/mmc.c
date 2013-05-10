@@ -1360,6 +1360,38 @@ int get_mmc_num(void)
 	return cur_dev_num;
 }
 
+/* enable hardware reset signal */
+int mmc_set_rst_n(struct mmc *mmc, u8 val)
+{
+	ALLOC_CACHE_ALIGN_BUFFER(u8, ext_csd, 512);
+	int err;
+
+	memset(ext_csd, 0, 512);
+	err = mmc_send_ext_csd(mmc, ext_csd);
+	if (err)
+		return err;
+
+	printf("before: RST_N=0x%02x\n",
+			(unsigned int)ext_csd[EXT_CSD_RST_N_FUNCTION] & 0xff);
+
+	printf("setting rstn to 0x%02x\n", (unsigned int)val & 0xff);
+
+	err = mmc_switch(mmc, EXT_CSD_CMD_SET_NORMAL,
+			EXT_CSD_RST_N_FUNCTION, val);
+	if (err)
+		return err;
+
+	memset(ext_csd, 0, 512);
+	err = mmc_send_ext_csd(mmc, ext_csd);
+	if (err)
+		return err;
+
+	printf("after: RST_N=0x%02x\n",
+			(unsigned int)ext_csd[EXT_CSD_RST_N_FUNCTION] & 0xff);
+
+	return 0;
+}
+
 int mmc_initialize(bd_t *bis)
 {
 	INIT_LIST_HEAD (&mmc_devices);

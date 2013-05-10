@@ -158,6 +158,7 @@
  * EXT_CSD fields
  */
 #define EXT_CSD_PARTITIONING_SUPPORT	160	/* RO */
+#define EXT_CSD_RST_N_FUNCTION          162     /* R/W */
 #define EXT_CSD_ERASE_GROUP_DEF		175	/* R/W */
 #define EXT_CSD_PART_CONF		179	/* R/W */
 #define EXT_CSD_BUS_WIDTH		183	/* R/W */
@@ -167,6 +168,7 @@
 #define EXT_CSD_SEC_CNT			212	/* RO, 4 bytes */
 #define EXT_CSD_HC_ERASE_GRP_SIZE	224	/* RO */
 #define EXT_CSD_BOOT_MULT		226	/* RO */
+
 
 /*
  * EXT_CSD field definitions
@@ -290,5 +292,7 @@ struct mmc *mmc_spi_init(uint bus, uint cs, uint speed, uint mode);
 #else
 int mmc_legacy_init(int verbose);
 #endif
+
+int mmc_set_rst_n(struct mmc *mmc, u8 val);
 
 #endif /* _MMC_H_ */

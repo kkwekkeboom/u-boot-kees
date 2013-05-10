@@ -208,6 +208,29 @@ static int do_mmcops(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 			return CMD_RET_USAGE;
 		print_mmc_devices('\n');
 		return 0;
+	} else if (strncmp(argv[1], "rstn", 4) == 0) {
+		struct mmc *mmc;
+		u8 val;
+		int err;
+
+		if (argc != 3)
+			return CMD_RET_USAGE;
+
+		val = simple_strtol(argv[2], NULL, 10);
+
+		mmc = find_mmc_device(curr_device);
+		if (!mmc) {
+			printf("no mmc device at slot %x\n", curr_device);
+			return 1;
+		}
+		err = mmc_set_rst_n(mmc, val);
+		if (err != 0) {
+			printf("failed to set RST_N to 0x%02x\n",
+					(unsigned int)val & 0xff);
+			return 1;
+		}
+
+		return 0;
 	} else if (strcmp(argv[1], "dev") == 0) {
 		int dev, part = -1;
 		struct mmc *mmc;
@@ -334,5 +357,6 @@ U_BOOT_CMD(
 	"mmc rescan\n"
 	"mmc part - lists available partition on current mmc device\n"
 	"mmc dev [dev] [part] - show or set current mmc device [partition]\n"
-	"mmc list - lists available devices");
+	"mmc list - lists available devices\n"
+	"mmc rstn - enable hardware reset of emmc");
 #endif
