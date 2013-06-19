@@ -61,6 +61,7 @@
 	"rdaddr=0x81000000\0" \
 	"bootdir=/boot\0" \
 	"bootfile=uImage\0" \
+	"board_name=unknown\0" \
 	"fdtfile=am335x-boneblack.dtb\0" \
 	"console=ttyO0,115200n8\0" \
 	"optargs=\0" \
@@ -139,14 +140,14 @@
 		"run ramargs; " \
 		"bootm ${loadaddr} ${rdaddr} ${fdtaddr}\0" \
 	"findfdt="\
-		"if test $board_name = A335BONE; then " \
-			"setenv fdtfile am335x-bone.dtb; fi; " \
-		"if test $board_name = A335BNLT; then " \
-			"setenv fdtfile am335x-boneblack.dtb; fi; " \
 		"if test $board_name = A33515BB; then " \
 			"setenv fdtfile am335x-evm.dtb; fi; " \
 		"if test $board_name = A335X_SK; then " \
-			"setenv fdtfile am335x-evmsk.dtb; fi\0" \
+			"setenv fdtfile am335x-evmsk.dtb; fi;" \
+		"if test $board_name = A335BONE; then " \
+			"setenv fdtfile am335x-bone.dtb; fi; " \
+		"if test $board_name = A335BNLT; then " \
+			"setenv fdtfile am335x-boneblack.dtb; fi\0" \
 
 #endif
 
