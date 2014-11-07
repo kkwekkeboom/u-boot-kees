@@ -56,140 +56,134 @@
 
 #ifndef CONFIG_SPL_BUILD
 #define CONFIG_EXTRA_ENV_SETTINGS \
-	"loadaddr=0x80200000\0" \
-	"fdtaddr=0x80F80000\0" \
-	"fdt_high=0xffffffff\0" \
-	"boot_fdt=try\0" \
-	"rdaddr=0x81000000\0" \
-	"bootpart=0:2\0" \
-	"bootdir=/boot\0" \
-	"bootfile=zImage\0" \
-	"fdtfile=am335x-boneblack.dtb\0" \
-	"fdtbase=am335x-boneblack\0" \
-	"console=ttyO0,115200n8\0" \
-	"optargs=\0" \
-	"dfu_alt_info_mmc=" DFU_ALT_INFO_MMC "\0" \
-	"dfu_alt_info_emmc=rawemmc mmc 0 3751936\0" \
-	"mmcdev=0\0" \
-	"mmcpart=1\0" \
-	"mmcroot=/dev/mmcblk0p2 ro\0" \
-	"mmcrootfstype=ext4 rootwait fixrtc\0" \
-	"rootpath=/export/rootfs\0" \
-	"nfsopts=nolock\0" \
-	"static_ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:${hostname}" \
-		"::off\0" \
-	"ramroot=/dev/ram0 rw ramdisk_size=65536 initrd=${rdaddr},64M\0" \
-	"ramrootfstype=ext2\0" \
-	"mmcargs=setenv bootargs console=${console} " \
-		"${optargs} " \
-		"root=${mmcroot} " \
-		"rootfstype=${mmcrootfstype}\0" \
-	"spiroot=/dev/mtdblock4 rw\0" \
-	"spirootfstype=jffs2\0" \
-	"spisrcaddr=0xe0000\0" \
-	"spiimgsize=0x362000\0" \
-	"spibusno=0\0" \
-	"spiargs=setenv bootargs console=${console} " \
-		"${optargs} " \
-		"root=${spiroot} " \
-		"rootfstype=${spirootfstype}\0" \
-	"netargs=setenv bootargs console=${console} " \
-		"${optargs} " \
-		"root=/dev/nfs " \
-		"nfsroot=${serverip}:${rootpath},${nfsopts} rw " \
-		"ip=dhcp\0" \
-	"bootenv=uEnv.txt\0" \
-	"loadbootenv=load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${bootenv}\0" \
-	"importbootenv=echo Importing environment from mmc ...; " \
-		"env import -t $loadaddr $filesize\0" \
-	"dfu_alt_info_ram=" DFU_ALT_INFO_RAM "\0" \
-	"ramargs=setenv bootargs console=${console} " \
-		"${optargs} " \
-		"root=${ramroot} " \
-		"rootfstype=${ramrootfstype}\0" \
-	"loadramdisk=load mmc ${mmcdev} ${rdaddr} ramdisk.gz\0" \
-	"loadimage=load mmc ${bootpart} ${loadaddr} ${bootdir}/${bootfile}\0" \
-	"loadzimage=load mmc ${mmcdev}:${mmcpart} ${loadaddr} zImage\0" \
-	"loadfdt=load mmc ${mmcdev}:${mmcpart} ${fdtaddr} /dtbs/${fdtfile}\0" \
-	"mmcboot=echo Booting from mmc ...; " \
-		"run mmcargs; " \
-		"bootz ${loadaddr} - ${fdtaddr}\0" \
-	"mmc_classic_boot=echo Booting from mmc ...; " \
-		"run mmcargs; " \
-		"bootz ${loadaddr}\0" \
-	"spiboot=echo Booting from spi ...; " \
-		"run spiargs; " \
-		"sf probe ${spibusno}:0; " \
-		"sf read ${loadaddr} ${spisrcaddr} ${spiimgsize}; " \
-		"bootz ${loadaddr}\0" \
-	"netboot=echo Booting from network ...; " \
-		"setenv autoload no; " \
-		"dhcp; " \
-		"tftp ${loadaddr} ${bootfile}; " \
-		"tftp ${fdtaddr} ${fdtfile}; " \
-		"run netargs; " \
-		"bootz ${loadaddr} - ${fdtaddr}\0" \
-	"ramboot=echo Booting from ramdisk ...; " \
-		"run ramargs; " \
-		"bootz ${loadaddr} ${rdaddr} ${fdtaddr}\0" \
-	"findfdt="\
-		"if test $board_name = A335BONE; then " \
-			"setenv fdtfile am335x-bone.dtb; setenv fdtbase am335x-bone; fi; " \
-		"if test $board_name = A335BNLT; then " \
-			"setenv fdtfile am335x-boneblack.dtb; setenv fdtbase am335x-boneblack; fi; " \
-		"if test $board_name = A33515BB; then " \
-			"setenv fdtfile am335x-evm.dtb; fi; " \
-		"if test $board_name = A335X_SK; then " \
-			"setenv fdtfile am335x-evmsk.dtb; fi; " \
-		"if test $fdtfile = undefined; then " \
-			"echo WARNING: Could not determine device tree to use; fi; \0" \
-	NANDARGS
+	"bootdelay=0\0" \
+        "loadaddr=0x80200000\0" \
+        "kloadaddr=0x80007fc0\0" \
+        "fdtaddr=0x80F80000\0" \
+        "fdt_high=0xffffffff\0" \
+        "rdaddr=0x81000000\0" \
+        "bootdir=/boot\0" \
+        "bootfile=uImage\0" \
+        "board_name=unknown\0" \
+        "fdtfile=am335x-boneblack.dtb\0" \
+        "console=ttyO0,115200n8\0" \
+        "optargs=\0" \
+        "mtdids=" MTDIDS_DEFAULT "\0" \
+        "mtdparts=" MTDPARTS_DEFAULT "\0" \
+        "dfu_alt_info_mmc=" DFU_ALT_INFO_MMC "\0" \
+        "dfu_alt_info_emmc=rawemmc mmc 0 3751936\0" \
+        "dfu_alt_info_nand=" DFU_ALT_INFO_NAND "\0" \
+        "mmcdev=0\0" \
+        "mmcroot=/dev/mmcblk0p2 ro\0" \
+        "mmcrootfstype=ext4 rootwait\0" \
+        "bootpart=0:2\0" \
+        "nandroot=ubi0:rootfs rw ubi.mtd=7,2048\0" \
+        "nandrootfstype=ubifs rootwait=1\0" \
+        "nandsrcaddr=0x280000\0" \
+        "nandimgsize=0x500000\0" \
+        "rootpath=/export/rootfs\0" \
+        "nfsopts=nolock\0" \
+        "static_ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}:${hostname}" \
+                "::off\0" \
+        "ramroot=/dev/ram0 rw ramdisk_size=65536 initrd=${rdaddr},64M\0" \
+        "ramrootfstype=ext2\0" \
+        "mmcargs=setenv bootargs console=${console} " \
+                "${optargs} " \
+                "root=${mmcroot} " \
+                "rootfstype=${mmcrootfstype}\0" \
+        "nandargs=setenv bootargs console=${console} " \
+                "${optargs} " \
+                "root=${nandroot} " \
+                "rootfstype=${nandrootfstype}\0" \
+        "spiroot=/dev/mtdblock4 rw\0" \
+        "spirootfstype=jffs2\0" \
+        "spisrcaddr=0xe0000\0" \
+        "spiimgsize=0x362000\0" \
+        "spibusno=0\0" \
+        "spiargs=setenv bootargs console=${console} " \
+                "${optargs} " \
+                "root=${spiroot} " \
+                "rootfstype=${spirootfstype}\0" \
+        "netargs=setenv bootargs console=${console} " \
+                "${optargs} " \
+                "root=/dev/nfs " \
+                "nfsroot=${serverip}:${rootpath},${nfsopts} rw " \
+                "ip=dhcp\0" \
+        "bootenv=uEnv.txt\0" \
+        "loadbootenv=load mmc ${mmcdev} ${loadaddr} ${bootenv}\0" \
+        "importbootenv=echo Importing environment from mmc ...; " \
+                "env import -t $loadaddr $filesize\0" \
+        "ramargs=setenv bootargs console=${console} " \
+                "${optargs} " \
+                "root=${ramroot} " \
+                "rootfstype=${ramrootfstype}\0" \
+        "loadramdisk=load mmc ${mmcdev} ${rdaddr} ramdisk.gz\0" \
+        "loaduimage=load mmc ${bootpart} ${kloadaddr} ${bootdir}/${bootfile}\0" \
+        "loadfdt=load mmc ${bootpart} ${fdtaddr} ${bootdir}/${fdtfile}\0" \
+        "mmcboot=echo Booting from mmc ...; " \
+                "run mmcargs; " \
+                "bootm ${kloadaddr} - ${fdtaddr}\0" \
+        "nandboot=echo Booting from nand ...; " \
+                "run nandargs; " \
+                "nand read ${loadaddr} ${nandsrcaddr} ${nandimgsize}; " \
+                "bootm ${loadaddr}\0" \
+        "spiboot=echo Booting from spi ...; " \
+                "run spiargs; " \
+                "sf probe ${spibusno}:0; " \
+                "sf read ${loadaddr} ${spisrcaddr} ${spiimgsize}; " \
+                "bootm ${loadaddr}\0" \
+        "netboot=echo Booting from network ...; " \
+                "setenv autoload no; " \
+                "dhcp; " \
+                "tftp ${loadaddr} ${bootfile}; " \
+                "tftp ${fdtaddr} ${fdtfile}; " \
+                "run netargs; " \
+                "bootm ${loadaddr} - ${fdtaddr}\0" \
+        "ramboot=echo Booting from ramdisk ...; " \
+                "run ramargs; " \
+                "bootm ${loadaddr} ${rdaddr} ${fdtaddr}\0" \
+        "findfdt="\
+                "if test $board_name = A33515BB; then " \
+                        "setenv fdtfile am335x-evm.dtb; fi; " \
+                "if test $board_name = A335X_SK; then " \
+                        "setenv fdtfile am335x-evmsk.dtb; fi;" \
+                "if test $board_name = A335BONE; then " \
+                        "setenv fdtfile am335x-bone.dtb; fi; " \
+                "if test $board_name = A335BNLT; then " \
+                        "setenv fdtfile am335x-boneblack.dtb; fi\0" \
+
 #endif
 
 #define CONFIG_BOOTCOMMAND \
-	"gpio set 53; " \
-	"i2c mw 0x24 1 0x3e; " \
-	"run findfdt; " \
-	"mmc dev 0; if mmc rescan ; then " \
-		"gpio set 54; " \
-		"setenv mmcdev 0; " \
-		"echo SD/MMC found on device ${mmcdev}; " \
-		"if run loadbootenv; then " \
-			"run importbootenv; " \
-		"fi; " \
-		"if test -n $cape; then " \
-			"setenv fdtfile $fdtbase-$cape.dtb; " \
-			"echo using: $fdtfile...; " \
-		"fi; " \
-		"gpio set 55; " \
-		"echo Checking if uenvcmd is set ...;" \
-		"if test -n $uenvcmd; then " \
-			"gpio set 56; " \
-			"echo Running uenvcmd ...; " \
-			"run uenvcmd;" \
-		"fi; " \
-		"echo; echo uenvcmd was not defined in uEnv.txt ...; echo trying eMMC (BeagleBone Black) ...; echo;" \
-	"fi;" \
-	"mmc dev 1; if mmc rescan ; then " \
-		"gpio set 54; " \
-		"setenv mmcdev 1; " \
-		"echo SD/MMC found on device ${mmcdev}; " \
-		"if run loadbootenv; then " \
-			"run importbootenv; " \
-		"fi; " \
-		"if test -n $cape; then " \
-			"setenv fdtfile $fdtbase-$cape.dtb; " \
-			"echo using: $fdtfile...; " \
-		"fi; " \
-		"gpio set 55; " \
-		"echo Checking if uenvcmd is set ...;" \
-		"if test -n $uenvcmd; then " \
-			"gpio set 56; " \
-			"echo Running uenvcmd ...; " \
-			"run uenvcmd;" \
-		"fi; " \
-		"echo; echo uenvcmd was not defined in uEnv.txt ...; echo halting ...; echo;" \
-	"fi;" \
+        "gpio set 53; " \
+        "i2c mw 0x24 1 0x3e; " \
+        "run findfdt; " \
+        "mmc dev 0; if mmc rescan ; then " \
+                "echo micro SD card found;" \
+                "setenv mmcdev 0;"\
+        "else " \
+                "echo No micro SD card found, setting mmcdev to 1;" \
+                "setenv mmcdev 1;"\
+        "fi;" \
+        "setenv bootpart ${mmcdev}:2;" \
+        "mmc dev ${mmcdev}; if mmc rescan; then " \
+                "gpio set 54; " \
+                "echo SD/MMC found on device ${mmcdev};" \
+                "if run loadbootenv; then " \
+                        "echo Loaded environment from ${bootenv};" \
+                        "run importbootenv;" \
+                "fi;" \
+                "if test -n $uenvcmd; then " \
+                        "echo Running uenvcmd ...;" \
+                        "run uenvcmd;" \
+                "fi;" \
+                "gpio set 55; " \
+                "if run loaduimage; then " \
+                        "gpio set 56; " \
+                        "run loadfdt;" \
+                        "run mmcboot;" \
+                "fi;" \
+        "fi;" \
 
 /* NS16550 Configuration */
 #define CONFIG_SYS_NS16550_COM1		0x44e09000	/* Base EVM has UART0 */
