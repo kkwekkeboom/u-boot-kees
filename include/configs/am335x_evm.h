@@ -56,7 +56,7 @@
 
 #ifndef CONFIG_SPL_BUILD
 #define CONFIG_EXTRA_ENV_SETTINGS \
-	"bootdelay=0\0" \
+				"bootdelay=0\0" \
         "loadaddr=0x80200000\0" \
         "kloadaddr=0x80007fc0\0" \
         "fdtaddr=0x80F80000\0" \
