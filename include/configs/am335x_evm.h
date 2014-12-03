@@ -55,11 +55,12 @@
 #ifndef CONFIG_SPL_BUILD
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"bootdelay=0\0" \
-	"loadaddr=0x80200000\0" \
+	"loadaddr=0x82000000\0" \
 	"kloadaddr=0x80007fc0\0" \
-	"fdtaddr=0x80F80000\0" \
+	"fdtaddr=0x88000000\0" \
 	"fdt_high=0xffffffff\0" \
-	"rdaddr=0x81000000\0" \
+	"rdaddr=0x88080000\0" \
+	"initrd_high=0xffffffff\0" \
 	"bootdir=/boot\0" \
 	"bootfile=uImage\0" \
 	"board_name=unknown\0" \
